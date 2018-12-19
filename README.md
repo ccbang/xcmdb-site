@@ -9,7 +9,6 @@
 
 ```config
 git clone https://github.com/ccbang/xcmdb-site.git
-cd xcmdb
 yarn install
 yarn start
 # or
