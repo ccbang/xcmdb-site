@@ -128,3 +128,49 @@ export async function getFakeCaptcha(mobile) {
 export async function queryCredentials() {
   return request('/api/credentials');
 }
+
+export async function queryHosts(params) {
+  return request(`/api/inventories/hosts?${stringify(params)}`);
+}
+
+export async function queryGroups(params) {
+  return request(`/api/inventories/group?${stringify(params)}`);
+}
+export async function queryGeneral(params) {
+  return request(`/api/inventories/general?${stringify(params)}`);
+}
+
+export async function createGeneral(params) {
+  return request('/api/inventories/general', {
+    method: 'POST',
+    body: params,
+  });
+}
+
+export async function updateGeneral(params) {
+  return request('/api/inventories/general', {
+    method: 'PATCH',
+    body: params,
+  });
+}
+
+export async function removeGeneral(params) {
+  const { id } = params;
+  return request(`/api/inventories/general/${id}/`, {
+    method: 'DELETE',
+  });
+}
+
+export async function removeGeneralBluk(params) {
+  return request(`/api/inventories/general/bluk/`, {
+    method: 'POST',
+    body: params,
+  });
+}
+
+export async function disableGeneral(params) {
+  return request(`/api/inventories/general/disable/`, {
+    method: 'POST',
+    body: params,
+  });
+}

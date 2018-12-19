@@ -56,12 +56,6 @@ export default [
         component: './NotImplemented',
       },
       {
-        path: '/inventories',
-        icon: 'credit-card',
-        name: 'inventories',
-        component: './NotImplemented',
-      },
-      {
         path: '/users',
         icon: 'user',
         name: 'users',
@@ -117,10 +111,14 @@ export default [
         component: './YamlOnline',
       },
       {
-        name: 'machine',
-        icon: 'hdd',
-        path: '/machine',
-        routes: [{ path: '/machine/list', name: 'list', component: './Machine/TableList' }],
+        path: '/inventories',
+        icon: 'credit-card',
+        name: 'inventories',
+        routes: [
+          { path: '/inventories/general', name: 'general', component: './Machine/GeneralList' },
+          { path: '/inventories/group', name: 'group', component: './Machine/GroupList' },
+          { path: '/inventories/list', name: 'list', component: './Machine/HostsList' },
+        ],
       },
       {
         name: 'account',
