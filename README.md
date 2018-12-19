@@ -6,3 +6,13 @@
 - 前端 [ANT DESIGN PRO][1]
 - 后端 [Django >= 2.1][2]
 - ansible >= v2.7
+
+```config
+git clone https://github.com/ccbang/xcmdb-site.git
+cd xcmdb
+yarn install
+yarn start
+# or
+npm install
+npm start
+```
