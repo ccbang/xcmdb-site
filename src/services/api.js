@@ -130,11 +130,11 @@ export async function queryCredentials() {
 }
 
 export async function queryHosts(params) {
-  return request(`/django/api/host/?${stringify(params)}`);
+  return request(`/api/host/?${stringify(params)}`);
 }
 
 export async function createHost(params) {
-  return request('/django/api/host/', {
+  return request('/api/host/', {
     method: 'POST',
     body: params,
   });
@@ -142,7 +142,7 @@ export async function createHost(params) {
 
 export async function updateHost(params) {
   const { id } = params;
-  return request(`/django/api/host/${id}/`, {
+  return request(`/api/host/${id}/`, {
     method: 'PATCH',
     body: params,
   });
@@ -150,7 +150,7 @@ export async function updateHost(params) {
 
 export async function removeHost(params) {
   const { id } = params;
-  return request(`/django/api/host/${id}/`, {
+  return request(`/api/host/${id}/`, {
     method: 'DELETE',
   });
 }

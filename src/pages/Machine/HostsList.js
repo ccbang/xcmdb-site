@@ -1,7 +1,7 @@
 import React, { PureComponent, Fragment } from 'react';
 import { connect } from 'dva';
 import moment from 'moment';
-import { Card, Form, Button, Badge } from 'antd';
+import { Card, Form, Button, Badge, Drawer, Divider } from 'antd';
 import StandardTable from '@/components/StandardTable';
 import PageHeaderWrapper from '@/components/PageHeaderWrapper';
 import DescriptionList from '@/components/DescriptionList';
@@ -33,6 +33,7 @@ const statusMap = {
 class HostsList extends PureComponent {
   state = {
     visible: false,
+    drawerVisible: false,
     expandForm: false,
     selectedRows: [],
     formValues: {},
@@ -91,6 +92,8 @@ class HostsList extends PureComponent {
       render: (text, record) => (
         <Fragment>
           <a onClick={() => this.showEditModal(record)}>配置</a>
+          <Divider type="vertical" />
+          <a onClick={() => this.showDrawer(record)}>详细信息</a>
         </Fragment>
       ),
     },
@@ -162,9 +165,22 @@ class HostsList extends PureComponent {
     });
   };
 
+  showDrawer = item => {
+    this.setState({
+      drawerVisible: true,
+      current: item,
+    });
+  };
+
   handleCancel = () => {
     this.setState({
       visible: false,
+    });
+  };
+
+  handleCancelDrawer = () => {
+    this.setState({
+      drawerVisible: false,
     });
   };
 
@@ -188,7 +204,7 @@ class HostsList extends PureComponent {
 
   render() {
     const { hosts, loading } = this.props;
-    const { selectedRows, expandForm, current = {}, visible } = this.state;
+    const { selectedRows, expandForm, current = {}, visible, drawerVisible } = this.state;
     return (
       <PageHeaderWrapper>
         <Card bordered={false}>
@@ -237,6 +253,15 @@ class HostsList extends PureComponent {
           </div>
         </Card>
         <HostForm visible={visible} current={current} handleCancel={this.handleCancel} />
+        <Drawer
+          width={640}
+          placement="right"
+          closable={false}
+          onClose={this.handleCancelDrawer}
+          visible={drawerVisible}
+        >
+          a23123123
+        </Drawer>
       </PageHeaderWrapper>
     );
   }
