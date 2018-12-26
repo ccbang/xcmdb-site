@@ -38,6 +38,8 @@ export default {
   'menu.account.logout': '退出登录',
   'menu.online': '在线写Yaml',
   'menu.templates': '模板管理',
+  'menu.templates.tasks': 'Tasks管理',
+  'menu.templates.roles': 'Roles管理',
   'menu.credentials': '密钥管理',
   'menu.projects': '项目管理',
   'menu.inventories': '资产管理',

@@ -130,7 +130,29 @@ export async function queryCredentials() {
 }
 
 export async function queryHosts(params) {
-  return request(`/api/inventories/hosts?${stringify(params)}`);
+  return request(`/django/api/host/?${stringify(params)}`);
+}
+
+export async function createHost(params) {
+  return request('/django/api/host/', {
+    method: 'POST',
+    body: params,
+  });
+}
+
+export async function updateHost(params) {
+  const { id } = params;
+  return request(`/django/api/host/${id}/`, {
+    method: 'PATCH',
+    body: params,
+  });
+}
+
+export async function removeHost(params) {
+  const { id } = params;
+  return request(`/django/api/host/${id}/`, {
+    method: 'DELETE',
+  });
 }
 
 export async function queryGroups(params) {

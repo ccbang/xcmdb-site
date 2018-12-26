@@ -1,7 +1,7 @@
 import React, { PureComponent, Fragment } from 'react';
 import { connect } from 'dva';
 import moment from 'moment';
-import { Card, Form, Button, Modal, Badge, Divider } from 'antd';
+import { Card, Form, Button, Badge } from 'antd';
 import StandardTable from '@/components/StandardTable';
 import PageHeaderWrapper from '@/components/PageHeaderWrapper';
 import DescriptionList from '@/components/DescriptionList';
@@ -16,16 +16,21 @@ const getValue = obj =>
   Object.keys(obj)
     .map(key => obj[key])
     .join(',');
-const statusMap = ['default', 'processing', 'success', 'error'];
-const status = ['关闭', '运行中', '已上线', '异常'];
+const statusMap = {
+  success: '已上线',
+  processing: '运行中',
+  default: '未分配',
+  error: '异常',
+  warning: '警告',
+};
 
 /* eslint react/no-multi-comp:0 */
-@connect(({ rule, loading }) => ({
-  rule,
-  loading: loading.models.rule,
+@connect(({ hosts, loading }) => ({
+  hosts,
+  loading: loading.models.hosts,
 }))
 @Form.create()
-class TableList extends PureComponent {
+class HostsList extends PureComponent {
   state = {
     visible: false,
     expandForm: false,
@@ -35,50 +40,49 @@ class TableList extends PureComponent {
 
   columns = [
     {
-      title: '规则名称',
-      dataIndex: 'name',
+      title: 'hostname',
+      dataIndex: 'hostname',
+    },
+    {
+      title: '项目',
+      dataIndex: 'project',
     },
     {
       title: '描述',
-      dataIndex: 'desc',
-    },
-    {
-      title: '服务调用次数',
-      dataIndex: 'callNo',
-      sorter: true,
-      align: 'right',
-      render: val => `${val} 万`,
-      // mark to display a total number
-      needTotal: true,
+      dataIndex: 'description',
     },
     {
       title: '状态',
       dataIndex: 'status',
       filters: [
         {
-          text: status[0],
-          value: 0,
+          text: statusMap.success,
+          value: 'success',
         },
         {
-          text: status[1],
-          value: 1,
+          text: statusMap.default,
+          value: 'default',
         },
         {
-          text: status[2],
-          value: 2,
+          text: statusMap.error,
+          value: 'error',
         },
         {
-          text: status[3],
-          value: 3,
+          text: statusMap.warning,
+          value: 'warning',
+        },
+        {
+          text: statusMap.processing,
+          value: 'processing',
         },
       ],
       render(val) {
-        return <Badge status={statusMap[val]} text={status[val]} />;
+        return <Badge status={val} text={statusMap[val]} />;
       },
     },
     {
       title: '上次调度时间',
-      dataIndex: 'updatedAt',
+      dataIndex: 'modified',
       sorter: true,
       render: val => <span>{moment(val).format('YYYY-MM-DD HH:mm:ss')}</span>,
     },
@@ -87,8 +91,6 @@ class TableList extends PureComponent {
       render: (text, record) => (
         <Fragment>
           <a onClick={() => this.showEditModal(record)}>配置</a>
-          <Divider type="vertical" />
-          <a href="">订阅警报</a>
         </Fragment>
       ),
     },
@@ -97,7 +99,7 @@ class TableList extends PureComponent {
   componentDidMount() {
     const { dispatch } = this.props;
     dispatch({
-      type: 'rule/fetch',
+      type: 'hosts/fetch',
     });
   }
 
@@ -122,18 +124,8 @@ class TableList extends PureComponent {
     }
 
     dispatch({
-      type: 'rule/fetch',
+      type: 'hosts/fetch',
       payload: params,
-    });
-  };
-
-  handleSubmit = e => {
-    const { form, dispatch } = this.props;
-    const { current } = this.state;
-    e.preventDefault();
-    form.validateFields((err, values) => {
-      if (err) return;
-      console.log(values, current, dispatch);
     });
   };
 
@@ -144,7 +136,7 @@ class TableList extends PureComponent {
       formValues: {},
     });
     dispatch({
-      type: 'rule/fetch',
+      type: 'hosts/fetch',
       payload: {},
     });
   };
@@ -182,35 +174,20 @@ class TableList extends PureComponent {
     });
   };
 
-  handleSearch = e => {
-    e.preventDefault();
+  handleSearch = values => {
+    const { dispatch } = this.props;
+    this.setState({
+      formValues: values,
+    });
 
-    const { dispatch, form } = this.props;
-
-    form.validateFields((err, fieldsValue) => {
-      if (err) return;
-
-      const values = {
-        ...fieldsValue,
-        updatedAt: fieldsValue.updatedAt && fieldsValue.updatedAt.valueOf(),
-      };
-
-      this.setState({
-        formValues: values,
-      });
-
-      dispatch({
-        type: 'rule/fetch',
-        payload: values,
-      });
+    dispatch({
+      type: 'hosts/fetch',
+      payload: values,
     });
   };
 
   render() {
-    const {
-      rule: { data },
-      loading,
-    } = this.props;
+    const { hosts, loading } = this.props;
     const { selectedRows, expandForm, current = {}, visible } = this.state;
     return (
       <PageHeaderWrapper>
@@ -240,7 +217,8 @@ class TableList extends PureComponent {
             <StandardTable
               selectedRows={selectedRows}
               loading={loading}
-              data={data}
+              data={hosts}
+              rowKey="id"
               columns={this.columns}
               expandedRowRender={record =>
                 record.variables && record.variables.length > 0 ? (
@@ -258,20 +236,10 @@ class TableList extends PureComponent {
             />
           </div>
         </Card>
-        <Modal
-          title={current.id ? '修改组' : '添加组'}
-          width={640}
-          destroyOnClose
-          visible={visible}
-          okText="添加"
-          onOk={this.handleSubmit}
-          onCancel={this.handleCancel}
-        >
-          <HostForm />
-        </Modal>
+        <HostForm visible={visible} current={current} handleCancel={this.handleCancel} />
       </PageHeaderWrapper>
     );
   }
 }
 
-export default TableList;
+export default HostsList;

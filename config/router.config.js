@@ -36,12 +36,25 @@ export default [
           },
         ],
       },
+      {
+        path: '/inventories',
+        icon: 'credit-card',
+        name: 'inventories',
+        routes: [
+          { path: '/inventories/general', name: 'general', component: './Machine/GeneralList' },
+          { path: '/inventories/group', name: 'group', component: './Machine/GroupList' },
+          { path: '/inventories/list', name: 'list', component: './Machine/HostsList' },
+        ],
+      },
       // forms
       {
         path: '/templates',
         icon: 'project',
         name: 'templates',
-        component: './NotImplemented',
+        routes: [
+          { path: '/templates/tasks', name: 'tasks', component: './Template/TableList' },
+          { path: '/templates/roles', name: 'roles', component: './NotImplemented' },
+        ],
       },
       {
         path: '/credentials',
@@ -110,16 +123,7 @@ export default [
         path: '/online',
         component: './YamlOnline',
       },
-      {
-        path: '/inventories',
-        icon: 'credit-card',
-        name: 'inventories',
-        routes: [
-          { path: '/inventories/general', name: 'general', component: './Machine/GeneralList' },
-          { path: '/inventories/group', name: 'group', component: './Machine/GroupList' },
-          { path: '/inventories/list', name: 'list', component: './Machine/HostsList' },
-        ],
-      },
+
       {
         name: 'account',
         icon: 'user',

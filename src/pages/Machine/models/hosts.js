@@ -1,4 +1,4 @@
-import { queryHosts } from '@/services/api';
+import { queryHosts, createHost, updateHost, removeHost } from '@/services/api';
 
 export default {
   namespace: 'hosts',
@@ -16,13 +16,25 @@ export default {
         payload: response,
       });
     },
+    *submit({ payload }, { call, put }) {
+      let callback;
+      if (payload.id) {
+        callback = Object.keys(payload).length === 1 ? removeHost : updateHost;
+      } else {
+        callback = createHost;
+      }
+      yield call(callback, payload); // post
+      yield put({
+        type: 'fetch',
+      });
+    },
   },
 
   reducers: {
     save(state, { payload }) {
       return {
         ...state,
-        list: Array.isArray(payload) ? payload : [],
+        list: Array.isArray(payload.list) ? payload.list : [],
         pagination: payload.pagination || {},
       };
     },

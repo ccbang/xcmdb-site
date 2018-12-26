@@ -111,4 +111,11 @@ export default {
   },
 
   chainWebpack: webpackPlugin,
+  proxy: {
+    '/django': {
+      target: 'http://192.168.2.183/',
+      changeOrigin: true,
+      pathRewrite: { '^/django': '' },
+    },
+  },
 };

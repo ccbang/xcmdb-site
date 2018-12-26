@@ -7,9 +7,21 @@ const { Option } = Select;
 const SearchForm = Form.create()(props => {
   const { expandForm, form, handleSearch, handleFormReset, toggleForm, styles } = props;
   const { getFieldDecorator } = form;
+  const onSearch = e => {
+    e.preventDefault();
+    form.validateFields((err, fieldsValue) => {
+      if (err) return;
+      const values = {
+        ...fieldsValue,
+        modified: fieldsValue.modified && fieldsValue.modified.valueOf(),
+        created: fieldsValue.created && fieldsValue.created.valueOf(),
+      };
+      handleSearch(values);
+    });
+  };
   if (expandForm) {
     return (
-      <Form onSubmit={handleSearch} layout="inline">
+      <Form onSubmit={onSearch} layout="inline">
         <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
           <Col md={8} sm={24}>
             <FormItem label="hostname">
@@ -75,7 +87,7 @@ const SearchForm = Form.create()(props => {
     );
   }
   return (
-    <Form onSubmit={handleSearch} layout="inline">
+    <Form onSubmit={onSearch} layout="inline">
       <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
         <Col md={8} sm={24}>
           <FormItem label="hostname">
