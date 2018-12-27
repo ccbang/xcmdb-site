@@ -37,31 +37,76 @@ export default [
         ],
       },
       {
+        path: '/ansible',
+        name: 'ansible',
+        icon: 'book',
+        routes: [
+          {
+            path: '/ansible/general',
+            name: 'general',
+            icon: 'setting',
+            component: './Machine/GeneralList',
+          },
+          {
+            path: '/ansible/group',
+            name: 'group',
+            icon: 'radar-chart',
+            component: './Machine/GroupList',
+          },
+          {
+            path: '/ansible/credentials',
+            icon: 'solution',
+            name: 'credentials',
+            component: './Credentials/BasicList',
+          },
+          {
+            path: '/ansible/templates',
+            icon: 'project',
+            name: 'templates',
+            routes: [
+              {
+                path: '/ansible/templates/tasks',
+                name: 'tasks',
+                component: './Template/TableList',
+              },
+              { path: '/ansible/templates/roles', name: 'roles', component: './NotImplemented' },
+            ],
+          },
+        ],
+      },
+      {
         path: '/inventories',
         icon: 'credit-card',
         name: 'inventories',
         routes: [
-          { path: '/inventories/general', name: 'general', component: './Machine/GeneralList' },
-          { path: '/inventories/group', name: 'group', component: './Machine/GroupList' },
-          { path: '/inventories/list', name: 'list', component: './Machine/HostsList' },
+          {
+            path: '/inventories/list',
+            icon: 'database',
+            name: 'list',
+            component: './Machine/HostsList',
+          },
+          {
+            path: '/inventories/pc',
+            name: 'pc',
+            icon: 'desktop',
+            component: './Machine/HostsList',
+          },
+          {
+            path: '/inventories/net',
+            name: 'net',
+            icon: 'cluster',
+            component: './Machine/HostsList',
+          },
+          {
+            path: '/inventories/other',
+            name: 'other',
+            icon: 'mobile',
+            component: './Machine/HostsList',
+          },
         ],
       },
       // forms
-      {
-        path: '/templates',
-        icon: 'project',
-        name: 'templates',
-        routes: [
-          { path: '/templates/tasks', name: 'tasks', component: './Template/TableList' },
-          { path: '/templates/roles', name: 'roles', component: './NotImplemented' },
-        ],
-      },
-      {
-        path: '/credentials',
-        icon: 'key',
-        name: 'credentials',
-        component: './Credentials/BasicList',
-      },
+
       {
         path: '/projects',
         icon: 'experiment',
