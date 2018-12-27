@@ -1,4 +1,5 @@
-import { queryHosts, createHost, updateHost, removeHost } from '@/services/api';
+import { queryHosts, createHost, updateHost, removeHost, blukHost } from '@/services/api';
+import { message } from 'antd';
 
 export default {
   namespace: 'hosts',
@@ -27,6 +28,14 @@ export default {
       yield put({
         type: 'fetch',
       });
+    },
+    *blukSubmit({ payload }, { call, put }) {
+      const response = yield call(blukHost, payload);
+      if (response && response.message === 'ok') {
+        yield put({ type: 'fetch' });
+      } else {
+        message.error('批量处理发送了错误.');
+      }
     },
   },
 

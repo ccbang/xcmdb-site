@@ -155,6 +155,13 @@ export async function removeHost(params) {
   });
 }
 
+export async function blukHost(params) {
+  return request(`/api/host/bluk/`, {
+    method: 'POST',
+    body: params,
+  });
+}
+
 export async function queryGroups(params) {
   return request(`/api/inventories/group?${stringify(params)}`);
 }

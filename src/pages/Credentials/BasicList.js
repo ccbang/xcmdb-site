@@ -183,7 +183,7 @@ class BasicList extends PureComponent {
             {getFieldDecorator('description', {
               rules: [{ message: '请输入密钥描述！' }],
               initialValue: current.description,
-            })(<TextArea rows={4} placeholder="请输入" />)}
+            })(<TextArea rows={2} placeholder="请输入" />)}
           </FormItem>
           <FormItem label="认证用户名" {...this.formLayout}>
             {getFieldDecorator('remoteUser', {
@@ -201,13 +201,19 @@ class BasicList extends PureComponent {
             {getFieldDecorator('sshPrivate', {
               rules: [{ message: '请输入密钥！' }],
               initialValue: current.sshPrivate,
-            })(<TextArea rows={4} placeholder="请输入" />)}
+            })(<TextArea rows={4} placeholder="-----BEGIN RSA PRIVATE KEY-----" />)}
           </FormItem>
           <FormItem label="认证密钥密码" {...this.formLayout}>
             {getFieldDecorator('privatePassword', {
               rules: [{ required: true, message: '请输入远程认证密钥密码' }],
               initialValue: current.privatePassword,
             })(<Input type="password" placeholder="请输入" />)}
+          </FormItem>
+          <FormItem {...this.formLayout} label="公钥">
+            {getFieldDecorator('sshPublic', {
+              rules: [{ message: '请输入公钥！' }],
+              initialValue: current.sshPublic,
+            })(<TextArea rows={4} placeholder="ssh-rsa AAAA**" />)}
           </FormItem>
         </Form>
       );

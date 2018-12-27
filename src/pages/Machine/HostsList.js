@@ -1,12 +1,13 @@
 import React, { PureComponent, Fragment } from 'react';
 import { connect } from 'dva';
 import moment from 'moment';
-import { Card, Form, Button, Badge, Drawer, Divider } from 'antd';
+import { Card, Form, Button, Badge, Divider } from 'antd';
 import StandardTable from '@/components/StandardTable';
 import PageHeaderWrapper from '@/components/PageHeaderWrapper';
 import DescriptionList from '@/components/DescriptionList';
 import SearchForm from './SearchForm';
 import HostForm from './HostForm';
+import HostDrawer from './HostActivity';
 
 import styles from './TableList.less';
 
@@ -93,7 +94,7 @@ class HostsList extends PureComponent {
         <Fragment>
           <a onClick={() => this.showEditModal(record)}>配置</a>
           <Divider type="vertical" />
-          <a onClick={() => this.showDrawer(record)}>详细信息</a>
+          <a onClick={() => this.showDrawer(record)}>状况</a>
         </Fragment>
       ),
     },
@@ -191,6 +192,7 @@ class HostsList extends PureComponent {
   };
 
   handleSearch = values => {
+    // 顶部搜索框，并保存搜索词以便排序和筛选使用
     const { dispatch } = this.props;
     this.setState({
       formValues: values,
@@ -200,6 +202,21 @@ class HostsList extends PureComponent {
       type: 'hosts/fetch',
       payload: values,
     });
+  };
+
+  handleBluk = key => {
+    // 批量操作 key是对应的操作
+    const { dispatch } = this.props;
+    const { selectedRows } = this.state;
+    if (selectedRows.length > 0) {
+      dispatch({
+        type: 'hosts/blukSubmit',
+        payload: {
+          list: selectedRows.map(item => item.id),
+          action: key,
+        },
+      });
+    }
   };
 
   render() {
@@ -224,8 +241,8 @@ class HostsList extends PureComponent {
               </Button>
               {selectedRows.length > 0 && (
                 <span>
-                  <Button>删除</Button>
-                  <Button>下线</Button>
+                  <Button onClick={() => this.handleBluk('delete')}>删除</Button>
+                  <Button onClick={() => this.handleBluk('disable')}>下线</Button>
                   <Button>分配项目</Button>
                 </span>
               )}
@@ -253,15 +270,11 @@ class HostsList extends PureComponent {
           </div>
         </Card>
         <HostForm visible={visible} current={current} handleCancel={this.handleCancel} />
-        <Drawer
-          width={640}
-          placement="right"
-          closable={false}
-          onClose={this.handleCancelDrawer}
+        <HostDrawer
+          handleCancelDrawer={this.handleCancelDrawer}
           visible={drawerVisible}
-        >
-          a23123123
-        </Drawer>
+          current={current}
+        />
       </PageHeaderWrapper>
     );
   }
